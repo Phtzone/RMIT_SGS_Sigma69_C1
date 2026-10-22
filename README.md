@@ -2,16 +2,24 @@
 
 Tài liệu yêu cầu và quy định tuân thủ cho **Challenge 1 — Multilingual Prompt-Attack Classification**, thuộc RMIT GenAI & Cybersecurity Hackathon 2026.
 
+## Tài liệu dự án
+
+- [Yêu cầu nghiệp vụ và kỹ thuật](docs/requirements.md)
+- [Kiến trúc DistilBERT multilingual + QLoRA](docs/architecture.md)
+- [Phân công 4 thành viên và chiến lược branch](docs/team-plan.md)
+- [Quy trình tạo Kaggle Notebook và nộp bài](docs/kaggle-submission.md)
+- [Mục lục tài liệu](docs/README.md)
+
 ## 1. Nguồn thông tin và phạm vi
 
-- [Trang cuộc thi Kaggle](https://www.kaggle.com/competitions/rmit-hackathon-2026): nội dung Overview, Description, Challenge và Evaluation do người dùng cung cấp.
+- [Trang cuộc thi Kaggle](https://www.kaggle.com/competitions/rmit-hackathon-2026): Overview, Description, Challenge, Evaluation và Rules chính thức.
 - [Ảnh hướng dẫn của ban tổ chức](Pic/): deadline, quy tắc đặt tên và hướng dẫn nộp bài.
 - [Notebook demo chính thức](https://www.kaggle.com/code/aisuko/rmit-sgs-demo-c1), bản tải tại [demo/rmit-sgs-demo-c1.ipynb](demo/rmit-sgs-demo-c1.ipynb).
-- Cập nhật do người dùng xác nhận: được phép sử dụng model ngoài danh sách ban đầu.
-- Metadata Kaggle đã kiểm tra trong phiên làm việc: metric, deadline, giới hạn đội, lượt nộp và tỷ lệ public leaderboard.
+- Yêu cầu chính thức: chỉ sử dụng một pretrained backbone trong danh sách được duyệt. Dự án chọn `distilbert/distilbert-base-multilingual-cased`.
+- Metadata và FAQ Kaggle đã được đối chiếu: metric, deadline, giới hạn đội, lượt nộp, dữ liệu và tỷ lệ public leaderboard.
 - [Website hackathon](https://rmit-hackathon.com/) và Discussion của cuộc thi là nơi ban tổ chức công bố cập nhật, FAQ và quy định mới.
 
-Tài liệu này tổng hợp các nguồn trên, **không thay thế toàn bộ tab Rules hoặc các cập nhật chính thức**. Nội dung đầy đủ của tab Rules chưa được đọc trong phiên làm việc. Khi có thông tin khác nhau, cần kiểm tra thông báo mới nhất hoặc hỏi ban tổ chức trước khi thực hiện phần bị ảnh hưởng.
+Tài liệu này tổng hợp các nguồn trên nhưng không thay thế cập nhật chính thức. Khi các nguồn có thông tin khác nhau, ưu tiên cấu hình Kaggle đang được thực thi và thông báo mới nhất của ban tổ chức.
 
 Phạm vi của repository này là **C1**. Yêu cầu TideCloak và MCP server của Tide thuộc C2, không phải yêu cầu C1 trong các tài liệu đã cung cấp.
 
@@ -46,7 +54,7 @@ Cần kiểm tra schema và dữ liệu thực tế sau khi tải. Các tỷ l�
 
 ## 4. Yêu cầu triển khai
 
-Được phép sử dụng model ngoài danh sách ban đầu theo cập nhật người dùng xác nhận.
+Giải pháp của nhóm sử dụng `distilbert/distilbert-base-multilingual-cased`, lượng tử hóa 4-bit và fine-tune bằng QLoRA. Đây là model thuộc danh sách backbone được ban tổ chức phê duyệt.
 
 1. Fine-tune model trên `train.csv`.
 2. Dự đoán một nhãn hợp lệ cho mọi dòng trong `test.csv`.
@@ -100,6 +108,8 @@ Quy tắc đặt tên:
 - Tên áp dụng cho đội/repository hiện tại: **`RMIT_SGS_Sigma69_C1`**. Dùng tên này cho đội và notebook/kernel theo hướng dẫn được cung cấp.
 - Đăng nhập hoặc tạo tài khoản Kaggle, thành lập hoặc tham gia đội trên Kaggle và kiểm tra điều kiện tham gia trước khi nộp.
 - Metadata Kaggle ghi tối đa **4 thành viên/đội**.
+- Trong tổng số 4 người, một người tạo team và mời 3 người còn lại. Cả 3 lời mời phải được chấp nhận trước khi một người đại diện submit cho toàn đội.
+- C1 phải được triển khai thành một Kaggle Notebook, lưu một version chạy thành công và nộp `submission.csv` từ Kaggle theo [quy trình của nhóm](docs/kaggle-submission.md).
 
 ## 8. Deadline và giới hạn lượt nộp
 
@@ -143,6 +153,9 @@ Bản demo đã tải có **2 cell**: chuẩn bị dữ liệu/tokenizer và kh�
 
 - [ ] Kiểm tra cập nhật chính thức, tab Rules và các điểm chưa rõ trước khi áp dụng phương án liên quan.
 - [ ] Đội và notebook có tên `RMIT_SGS_Sigma69_C1`; đội không quá 4 thành viên.
+- [ ] Tab Team hiển thị đúng 4 người: 1 người tạo team và 3 người đã chấp nhận lời mời.
+- [ ] Notebook đã được tạo trong Kaggle Code, gắn competition data và DistilBERT model chính thức.
+- [ ] Đã lưu version bằng chế độ chạy lại toàn bộ notebook; version kết thúc thành công và có `/kaggle/working/submission.csv`.
 - [ ] Đã fine-tune trên `train.csv`; không chỉ khởi tạo model hoặc chạy inference từ model gốc.
 - [ ] Đã đánh giá Macro F1 trên validation; kiểm tra F1 từng lớp và từng ngôn ngữ như bước kiểm soát chất lượng của đội.
 - [ ] CSV có đúng header `id,label` và 6.000 dòng dữ liệu.
