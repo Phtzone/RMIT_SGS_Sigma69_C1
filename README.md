@@ -9,6 +9,7 @@ Tài liệu yêu cầu và quy định tuân thủ cho **Challenge 1 — Multili
 - [Phân công 4 thành viên và chiến lược branch](docs/team-plan.md)
 - [Quy trình tạo Kaggle Notebook và nộp bài](docs/kaggle-submission.md)
 - [Mục lục tài liệu](docs/README.md)
+- [Nội dung ôn tập và bài thi tham khảo C1](RESEARCH_C1.md) — bảo mật prompt, dữ liệu, đánh giá và submission
 
 ## 1. Nguồn thông tin và phạm vi
 
