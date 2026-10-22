@@ -1,0 +1,53 @@
+{
+    "languageNullable":  "python",
+    "kernelTypeNullable":  "notebook",
+    "isPrivateNullable":  false,
+    "enableGpuNullable":  true,
+    "enableTpuNullable":  false,
+    "enableInternetNullable":  true,
+    "currentVersionNumberNullable":  4,
+    "dockerImageNullable":  "gcr.io/kaggle-private-byod/python@sha256:2757e0c7d1e0a9cb43da657b97e223c321a98f5014bdf64f44f2f6b083ad2b2f",
+    "machineShapeNullable":  "NvidiaTeslaT4",
+    "id":  139717121,
+    "ref":  "aisuko/rmit-sgs-demo-c1",
+    "title":  "RMIT_SGS_demo_C1",
+    "author":  "Bowen",
+    "slug":  "rmit-sgs-demo-c1",
+    "lastRunTime":  "2026-10-19T03:14:06.944407Z",
+    "language":  "python",
+    "hasLanguage":  true,
+    "kernelType":  "notebook",
+    "hasKernelType":  true,
+    "isPrivate":  false,
+    "hasIsPrivate":  true,
+    "enableGpu":  true,
+    "hasEnableGpu":  true,
+    "enableTpu":  false,
+    "hasEnableTpu":  true,
+    "enableInternet":  true,
+    "hasEnableInternet":  true,
+    "categoryIds":  [
+                        "artificial intelligence",
+                        "multilabel classification",
+                        "gpu"
+                    ],
+    "datasetDataSources":  [
+
+                           ],
+    "kernelDataSources":  [
+
+                          ],
+    "competitionDataSources":  [
+                                   "rmit-hackathon-2026"
+                               ],
+    "modelDataSources":  [
+                             "aisuko/xlm-roberta-base/Transformers/default/1"
+                         ],
+    "totalVotes":  29,
+    "currentVersionNumber":  4,
+    "hasCurrentVersionNumber":  true,
+    "dockerImage":  "gcr.io/kaggle-private-byod/python@sha256:2757e0c7d1e0a9cb43da657b97e223c321a98f5014bdf64f44f2f6b083ad2b2f",
+    "hasDockerImage":  true,
+    "machineShape":  "NvidiaTeslaT4",
+    "hasMachineShape":  true
+}
