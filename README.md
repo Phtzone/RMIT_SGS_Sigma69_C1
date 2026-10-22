@@ -2,6 +2,8 @@
 
 Tài liệu yêu cầu và quy định tuân thủ cho **Challenge 1 — Multilingual Prompt-Attack Classification**, thuộc RMIT GenAI & Cybersecurity Hackathon 2026.
 
+Tài liệu học trước: [Nội dung ôn tập và bài thi tham khảo C1](RESEARCH_C1.md) — tập trung vào bảo mật prompt, dữ liệu, đánh giá và submission; không nghiên cứu model.
+
 ## 1. Nguồn thông tin và phạm vi
 
 - [Trang cuộc thi Kaggle](https://www.kaggle.com/competitions/rmit-hackathon-2026): nội dung Overview, Description, Challenge và Evaluation do người dùng cung cấp.
