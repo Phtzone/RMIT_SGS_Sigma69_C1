@@ -5,18 +5,38 @@ Tài liệu yêu cầu và quy định tuân thủ cho **Challenge 1 — Multili
 ## Tài liệu dự án
 
 - [Yêu cầu nghiệp vụ và kỹ thuật](docs/requirements.md)
-- [Kiến trúc DistilBERT multilingual + QLoRA](docs/architecture.md)
+- [Kiến trúc Wolf Defender và preset DistilBERT QLoRA](docs/architecture.md)
 - [Phân công 4 thành viên và chiến lược branch](docs/team-plan.md)
 - [Quy trình tạo Kaggle Notebook và nộp bài](docs/kaggle-submission.md)
+- [Tải và kết nối dữ liệu trên Google Colab](docs/colab-data.md)
+- [Kết quả baseline/v2/v3/v4 và thử nghiệm v5](docs/experiments.md)
+- [Kế hoạch hướng tới Macro F1 0.99](docs/upgrade-099-plan.md)
+- [Đối chiếu notebook Melbourne và phê duyệt Wolf](docs/melbourne-reference-review.md)
 - [Mục lục tài liệu](docs/README.md)
 - [Nội dung ôn tập và bài thi tham khảo C1](RESEARCH_C1.md) — bảo mật prompt, dữ liệu, đánh giá và submission
+
+## Notebook hiện tại: v5 Wolf Defender
+
+Upload **[final_97.ipynb](final_97.ipynb)** ở thư mục gốc lên Colab, chọn GPU và chạy từ đầu trong runtime mới. Đây là bản v5; các notebook trong `notebooks/archive/` là bản lịch sử. Giữ `MODEL_PRESET="wolf"`, `DATA_MODE="upload"`, rồi chọn [rmit-hackathon-2026.zip](rmit-hackathon-2026.zip) khi cell dữ liệu yêu cầu. Bộ ZIP vẫn chứa ba CSV như các phiên bản trước.
+
+Wolf dùng model BTC đã duyệt. Khi `WOLF_LOCAL_PATH=""`, notebook sẽ tải đúng `aisuko/wolf-defender-prompt-injection/transformers/default/1` bằng KaggleHub; bước này cần Internet. Có thể đặt `WOLF_LOCAL_PATH` vào thư mục model đã tải hoặc đã gắn trên Kaggle. ZIP dữ liệu không chứa weights. Xem [hướng dẫn Colab](docs/colab-data.md).
+
+V5 trở về cấu hình đã chạy của v3: **256 token đầu**, batch 8/accumulation 4, LR `3e-5`, weighted CE và tối đa 4 epoch. `WOLF_LOADING_MODE="v3_legacy"` tái hiện cách nạp config/tokenizer của lần v3; tùy chọn `checkpoint_config` dùng cách ánh xạ RoPE của v4 và là một thí nghiệm riêng. Luôn tự chọn checkpoint có Macro F1 validation cao nhất; không ép chọn epoch 2 hoặc 3. Cải tiến được thử riêng ở hậu xử lý: hiệu chỉnh nhỏ cho cặp BENIGN/JAILBREAK tiếng Bồ Đào Nha, chỉ bật khi nested cross-fit đạt điều kiện cải thiện; nếu không thì giữ kết quả trước hiệu chỉnh.
+
+Thay đổi thử nghiệm của v5 nằm **sau training**, nên bảng Macro F1 theo epoch không bắt buộc cao hơn v3. Xem gain và quyết định bật/tắt trong `pt_pair_tuning.json` để đánh giá bước mới, rồi đối chiếu CSV selection. Điểm cross-fit tăng vẫn không bảo đảm điểm Kaggle tăng.
+
+Mặc định **`USE_FULL_TRAIN=False`** để xem kết quả selection trước. `submission_selection.csv` là file sau hậu xử lý được chấp nhận; `submission_selection_global.csv` giữ dự đoán trước bước hiệu chỉnh tiếng Bồ Đào Nha. `submission.csv` giống kết quả selection khi tắt refit. Nếu chủ động bật `USE_FULL_TRAIN=True`, notebook train model mới trên 14.000 mẫu với epoch/tham số hậu xử lý đã khóa, rồi cập nhật `submission.csv`; không đánh giá trên holdout cũ đã đưa vào train.
+
+Hiện người dùng chỉ còn `submission.csv` của lần cũ, không còn logits hay ZIP artifacts. CSV chỉ có nhãn cuối nên không thể khôi phục score validation/test để fit và kiểm chứng bias; lần v5 này cần train lại từ cấu hình v3. Sau mục 10, tải thêm **`/content/selection_predictions.zip`** cùng CSV. ZIP nhỏ này lưu logits, ID, lexical scores nếu có, cấu hình/label mapping và tham số hậu xử lý, không chứa weights; có thể dùng cho các lần thử hậu xử lý sau mà không train GPU lại. `rmit_c1_artifacts.zip` vẫn là gói lớn chứa model và báo cáo.
+
+`MODEL_PRESET="distilbert"` giữ hướng DistilBERT QLoRA để đối chiếu; mỗi lần chạy chỉ chọn một backbone. [Bản v3 đã chạy](notebooks/archive/final_97_executed.ipynb) đạt raw validation Macro F1 **0.972933** ở epoch 4; người dùng báo public khoảng **0.97**. Log v4 người dùng cung cấp đạt tốt nhất **0.969274** ở epoch 3, chưa có public score v4. V4 thay nhiều yếu tố cùng lúc nên chưa thể quy nguyên nhân giảm điểm riêng cho context 512. **V5 chưa có kết quả GPU; không bảo đảm tái lập đúng điểm v3 hoặc đạt 0.99.** Lần v3 trên T4 mất khoảng 27:37 cho selection và 26:48 cho refit. [Kết quả và giới hạn](docs/experiments.md).
 
 ## 1. Nguồn thông tin và phạm vi
 
 - [Trang cuộc thi Kaggle](https://www.kaggle.com/competitions/rmit-hackathon-2026): Overview, Description, Challenge, Evaluation và Rules chính thức.
 - [Ảnh hướng dẫn của ban tổ chức](Pic/): deadline, quy tắc đặt tên và hướng dẫn nộp bài.
 - [Notebook demo chính thức](https://www.kaggle.com/code/aisuko/rmit-sgs-demo-c1), bản tải tại [demo/rmit-sgs-demo-c1.ipynb](demo/rmit-sgs-demo-c1.ipynb).
-- Yêu cầu chính thức: chỉ sử dụng một pretrained backbone trong danh sách được duyệt. Dự án chọn `distilbert/distilbert-base-multilingual-cased`.
+- Yêu cầu chính thức: chỉ sử dụng một pretrained backbone trong danh sách được duyệt. Wolf Defender đã được xác minh trong danh sách hiện tại; dự án chuyển mặc định sang Wolf theo yêu cầu người dùng, giữ DistilBERT QLoRA làm preset thay thế. [Bằng chứng nguồn](demo/competition-challenge.json).
 - Metadata và FAQ Kaggle đã được đối chiếu: metric, deadline, giới hạn đội, lượt nộp, dữ liệu và tỷ lệ public leaderboard.
 - [Website hackathon](https://rmit-hackathon.com/) và Discussion của cuộc thi là nơi ban tổ chức công bố cập nhật, FAQ và quy định mới.
 
@@ -55,7 +75,7 @@ Cần kiểm tra schema và dữ liệu thực tế sau khi tải. Các tỷ l�
 
 ## 4. Yêu cầu triển khai
 
-Giải pháp của nhóm sử dụng `distilbert/distilbert-base-multilingual-cased`, lượng tử hóa 4-bit và fine-tune bằng QLoRA. Đây là model thuộc danh sách backbone được ban tổ chức phê duyệt.
+V5 mặc định dùng `patronus-studio/wolf-defender-prompt-injection` từ Kaggle model của BTC và fine-tune toàn bộ model. Các phiên bản trước dùng `distilbert/distilbert-base-multilingual-cased`, lượng tử hóa 4-bit và QLoRA; hướng này vẫn có trong preset `distilbert`. Chọn đúng một backbone cho mỗi lần chạy và ghi rõ phương pháp train ở đầu notebook.
 
 1. Fine-tune model trên `train.csv`.
 2. Dự đoán một nhãn hợp lệ cho mọi dòng trong `test.csv`.
@@ -155,7 +175,7 @@ Bản demo đã tải có **2 cell**: chuẩn bị dữ liệu/tokenizer và kh�
 - [ ] Kiểm tra cập nhật chính thức, tab Rules và các điểm chưa rõ trước khi áp dụng phương án liên quan.
 - [ ] Đội và notebook có tên `RMIT_SGS_Sigma69_C1`; đội không quá 4 thành viên.
 - [ ] Tab Team hiển thị đúng 4 người: 1 người tạo team và 3 người đã chấp nhận lời mời.
-- [ ] Notebook đã được tạo trong Kaggle Code, gắn competition data và DistilBERT model chính thức.
+- [ ] Notebook đã được tạo trong Kaggle Code, gắn competition data và model chính thức khớp preset đã chọn (mặc định Wolf).
 - [ ] Đã lưu version bằng chế độ chạy lại toàn bộ notebook; version kết thúc thành công và có `/kaggle/working/submission.csv`.
 - [ ] Đã fine-tune trên `train.csv`; không chỉ khởi tạo model hoặc chạy inference từ model gốc.
 - [ ] Đã đánh giá Macro F1 trên validation; kiểm tra F1 từng lớp và từng ngôn ngữ như bước kiểm soát chất lượng của đội.

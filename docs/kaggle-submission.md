@@ -44,8 +44,8 @@ RMIT_SGS_Sigma69_C1
 ```
 
 4. Gắn competition data source `rmit-hackathon-2026`.
-5. Gắn model source chính thức cho `distilbert/distilbert-base-multilingual-cased` từ Kaggle Models.
-6. Bật GPU T4. Thiết kế hiện tại ưu tiên một GPU để tránh xung đột giữa model 4-bit và distributed training.
+5. V3 mặc định gắn [Wolf Defender của BTC](https://www.kaggle.com/models/aisuko/wolf-defender-prompt-injection/Transformers/default), version 1, và dùng `MODEL_PRESET="wolf"`. Nếu chọn preset `distilbert`, gắn model source chính thức `distilbert/distilbert-base-multilingual-cased` tương ứng.
+6. Bật một GPU T4 theo thiết kế notebook; không chạy distributed training với preset 4-bit.
 7. Không phụ thuộc vào tải model trực tiếp từ Internet; sử dụng model source do ban tổ chức cung cấp.
 
 Đường dẫn trong notebook phải xuất phát từ Kaggle input, ví dụ:
@@ -55,19 +55,19 @@ DATA_DIR = "/kaggle/input/competitions/rmit-hackathon-2026"
 OUTPUT_FILE = "/kaggle/working/submission.csv"
 ```
 
-Đường dẫn model phải được kiểm tra từ panel Input sau khi add model; không hard-code version chưa tồn tại.
+Đường dẫn model phải được kiểm tra từ panel Input sau khi add model. Với Wolf, đặt `WOLF_LOCAL_PATH` vào thư mục model đã gắn chứa `config.json` để không phụ thuộc tải mạng khi chạy version. Nguồn/version dùng trong notebook là `aisuko/wolf-defender-prompt-injection/transformers/default/1`; [bằng chứng BTC phê duyệt](../demo/competition-challenge.json) đã được lưu.
 
 ## 4. Nội dung notebook bắt buộc
 
 Notebook cuối phải chạy theo thứ tự:
 
-1. Tiêu đề, team, model được chọn và mô tả QLoRA config.
+1. Tiêu đề, team, model được chọn và phương pháp train; QLoRA config chỉ áp dụng cho preset DistilBERT.
 2. In phiên bản Python, PyTorch, Transformers, PEFT và bitsandbytes.
 3. Cố định seed.
 4. Đọc toàn bộ `train.csv` và `test.csv`.
 5. Kiểm tra schema, số dòng, ID và nhãn.
 6. Tạo train/validation split.
-7. Nạp DistilBERT 4-bit NF4 và gắn LoRA adapters.
+7. Nạp Wolf với head ba lớp để full fine-tuning, hoặc DistilBERT 4-bit NF4 và LoRA theo preset đã chọn.
 8. Fine-tune và chọn checkpoint theo validation Macro F1.
 9. Báo cáo Macro F1, per-class F1 và kết quả theo ngôn ngữ.
 10. Predict đủ 6.000 dòng test.
@@ -105,7 +105,7 @@ Không sửa notebook đang chạy. Nếu cần sửa, tạo version mới và g
 3. Submission description phải ngắn gọn nhưng truy vết được, ví dụ:
 
 ```text
-v1 distilmbert-qlora r16 maxlen512 weighted-ce seed42
+v5 wolf full-ft maxlen256 head weighted-ce seed42 selection pt-gated
 ```
 
 4. Kiểm tra lại team `RMIT_SGS_Sigma69_C1`.
@@ -125,7 +125,7 @@ Ngoài bảng trên, lưu lại:
 - file `submission.csv` đã nộp;
 - notebook version URL;
 - screenshot hoặc link trạng thái Kaggle đã chấm;
-- adapter/config tương ứng với submission;
+- full model/config với Wolf hoặc adapter/config với DistilBERT, đúng artifact tạo submission;
 - lỗi Kaggle nếu lượt nộp thất bại.
 
 Không commit Kaggle credentials, cookies, API token hoặc dữ liệu cuộc thi vào repository.

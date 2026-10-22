@@ -17,7 +17,7 @@ Trên Kaggle, một trong bốn thành viên giữ vai trò Team Leader, tạo `
 | Thành viên | Vai trò | Branch | Công việc chính | Đầu ra bắt buộc |
 |---|---|---|---|---|
 | Thành viên 1 | Data & preprocessing owner | `feat/data-pipeline` | EDA; kiểm tra schema; split; tokenizer; xử lý prompt dài; data collator | Module data dùng chung, EDA report, split/config cố định |
-| Thành viên 2 | QLoRA model owner | `feat/distilbert-qlora` | Load DistilBERT 4-bit; gắn LoRA; train loop; checkpoint adapter; smoke test GPU | Model factory, training entry point, baseline checkpoint và log |
+| Thành viên 2 | Model training owner | `feat/distilbert-qlora` | Wolf full fine-tuning mặc định; giữ preset DistilBERT QLoRA; train loop; lưu model/adapter; smoke test GPU | Model factory, training entry point, checkpoint và log |
 | Thành viên 3 | Evaluation & experiment owner | `feat/evaluation-tuning` | Macro F1; per-class/per-language metrics; weighted/focal loss; confusion matrix; thí nghiệm | Metric/loss module, bảng thí nghiệm, cấu hình tốt nhất có căn cứ |
 | Thành viên 4 | Inference, Kaggle submission & integration owner | `feat/inference-submission` | Test inference; submission validator; tạo Kaggle Notebook; lưu version; nộp bài; tích hợp PR | `submission.csv` hợp lệ, Kaggle Notebook/version URL, submission được chấm điểm |
 
@@ -40,11 +40,11 @@ build_dataset(df, tokenizer, with_labels) -> Dataset
 
 ### Thành viên 2 — `feat/distilbert-qlora`
 
-- Triển khai cấu hình NF4, double quantization và FP16.
-- Target LoRA ban đầu: `q_lin`, `v_lin`; giữ `pre_classifier` và `classifier` trainable.
+- Giữ tên branch đã phân công; V5 trong `final_97.ipynb` mặc định dùng Wolf Defender theo cấu hình train V3 đã có kết quả. Backbone đã được BTC duyệt và người dùng chấp nhận. Cấu hình cụ thể theo [architecture.md](architecture.md).
+- Wolf: fine-tune toàn bộ model/head ba lớp, mixed precision FP16 trên T4. DistilBERT là preset thay thế dùng NF4, double quantization và QLoRA; chỉ train adapter/head.
 - Xác nhận model chạy được ít nhất một batch trên Kaggle T4.
-- Lưu adapter, config và trainable parameter report.
-- Không thay backbone hoặc chuyển sang LoRA FP16 mà chưa thông báo cho cả nhóm.
+- Lưu full model với Wolf hoặc adapter/head với DistilBERT, kèm config và trainable parameter report.
+- Ghi rõ preset đã chọn cho cả nhóm; không trộn hai pretrained backbone trong một giải pháp.
 
 ### Thành viên 3 — `feat/evaluation-tuning`
 
@@ -56,12 +56,12 @@ build_dataset(df, tokenizer, with_labels) -> Dataset
 
 ### Thành viên 4 — `feat/inference-submission`
 
-- Nạp adapter tốt nhất và predict đủ test set.
+- Nạp model/adapter đúng cấu hình đã chọn và predict đủ test set.
 - Giữ nguyên ID và tạo đúng hai cột `id,label`.
 - Viết validator dừng ngay nếu sai 6.000 dòng, ID hoặc label.
 - Tích hợp notebook `RMIT_SGS_Sigma69_C1` chạy từ data tới submission.
-- Kiểm tra notebook ghi rõ backbone và QLoRA config ở đầu.
-- Tạo notebook thật trên Kaggle Code, gắn competition data và DistilBERT model source.
+- Kiểm tra notebook ghi rõ backbone và phương pháp train ở đầu; ghi QLoRA config nếu dùng preset DistilBERT.
+- Tạo notebook thật trên Kaggle Code, gắn competition data và model source tương ứng preset (mặc định Wolf).
 - Lưu version bằng chế độ chạy lại toàn bộ và kiểm tra `/kaggle/working/submission.csv` trong output.
 - Chỉ nộp bài sau khi một thành viên khác kiểm tra version, file output và tên team.
 - Ghi notebook URL, version, submission description, thời điểm nộp, trạng thái và điểm vào submission log.
@@ -72,12 +72,15 @@ build_dataset(df, tokenizer, with_labels) -> Dataset
 Các branch phải dùng chung:
 
 ```text
-MODEL_ID = distilbert/distilbert-base-multilingual-cased
+MODEL_PRESET = wolf
+MODEL_ID = patronus-studio/wolf-defender-prompt-injection
 LABELS = [BENIGN, JAILBREAK, PROMPT_INJECTION]
 SEED = 42
 PRIMARY_METRIC = macro_f1
 SUBMISSION_COLUMNS = [id, label]
 ```
+
+Nếu chọn preset `distilbert`, model ID là `distilbert/distilbert-base-multilingual-cased`; các branch dùng cùng preset/config cho một lần chạy. Tên branch lịch sử được giữ nguyên.
 
 Thành viên 1 chốt schema dataset trước. Thành viên 2 và 3 không tự tạo data format khác. Thành viên 4 chỉ tích hợp API công khai từ các module, không copy code sang notebook trước khi các PR được review.
 
@@ -107,7 +110,7 @@ Một task chỉ hoàn thành khi:
 | Lượt | Mục tiêu |
 |---:|---|
 | 1 | Xác nhận pipeline và format bằng baseline hợp lệ |
-| 2 | QLoRA baseline toàn bộ train |
+| 2 | Baseline backbone đã chọn trên toàn bộ train theo cấu hình được duyệt |
 | 3 | Loss xử lý mất cân bằng tốt nhất |
 | 4 | Max length/head-tail tốt nhất |
 | 5 | Hyperparameter tốt nhất theo validation |

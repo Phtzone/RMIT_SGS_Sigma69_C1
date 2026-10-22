@@ -1,0 +1,64 @@
+{
+  "retrieved_at_utc": "2026-10-22T07:05:07Z",
+  "retrieved_at_ict": "2026-10-22T14:05:07+07:00",
+  "source_url": "https://www.kaggle.com/competitions/rmit-hackathon-2026/overview/challenge",
+  "source_request": {
+    "method": "POST",
+    "url": "https://www.kaggle.com/api/i/competitions.PageService/ListPages",
+    "json_body": { "competitionId": 169360 }
+  },
+  "page": {
+    "id": 877551,
+    "competitionId": 169360,
+    "name": "Challenge",
+    "isPublished": true,
+    "postTitle": "evaluation",
+    "postId": 52153110,
+    "content_sha256_utf8": "397147f1a00bd2778c662720479e1a85e5edcac7589fcb52d62804aa04e9a7a4"
+  },
+  "snapshot_scope": "Structured extraction of the approved model list and a short Wolf row; not a full copy of the challenge or other competition pages.",
+  "rule_summary": "Build on one approved pretrained backbone, fine-tune on train.csv, and state the chosen model at the top of the notebook. Other pretrained backbones are not allowed.",
+  "wolf_approved_row_excerpt": "| `patronus-studio/wolf-defender-prompt-injection` | encoder (safety-tuned) | https://www.kaggle.com/models/aisuko/wolf-defender-prompt-injection/Transformers/default | already knows prompt injection |",
+  "approved_models": [
+    {
+      "model_id": "distilbert/distilbert-base-multilingual-cased",
+      "kaggle_model_url": "https://www.kaggle.com/models/aisuko/distilbert-base-multilingual-cased/Transformers/default"
+    },
+    {
+      "model_id": "jhu-clsp/mmBERT-small",
+      "kaggle_model_url": "https://www.kaggle.com/models/aisuko/mmbert-small/Transformers/default"
+    },
+    {
+      "model_id": "jhu-clsp/mmBERT-base",
+      "kaggle_model_url": "https://www.kaggle.com/models/aisuko/mmbert-base/Transformers/default"
+    },
+    {
+      "model_id": "FacebookAI/xlm-roberta-base",
+      "kaggle_model_url": "https://www.kaggle.com/models/aisuko/xlm-roberta-base/Transformers/default"
+    },
+    {
+      "model_id": "FacebookAI/xlm-roberta-large",
+      "kaggle_model_url": "https://www.kaggle.com/models/aisuko/xlm-roberta-large/Transformers/default"
+    },
+    {
+      "model_id": "google/rembert",
+      "kaggle_model_url": "https://www.kaggle.com/models/aisuko/rembert/Transformers/default"
+    },
+    {
+      "model_id": "protectai/deberta-v3-base-prompt-injection-v2",
+      "kaggle_model_url": "https://www.kaggle.com/models/aisuko/deberta-v3-base-prompt-injection-v2/Transformers/default"
+    },
+    {
+      "model_id": "patronus-studio/wolf-defender-prompt-injection",
+      "kaggle_model_url": "https://www.kaggle.com/models/aisuko/wolf-defender-prompt-injection/Transformers/default"
+    },
+    {
+      "model_id": "ibm-granite/granite-3.3-2b-instruct",
+      "kaggle_model_url": "https://www.kaggle.com/models/aisuko/granite-3.3-2b-instruct/Transformers/default"
+    },
+    {
+      "model_id": "mistralai/Mistral-7B-Instruct-v0.3",
+      "kaggle_model_url": "https://www.kaggle.com/models/aisuko/mistral-7b-instruct-v0.3/Transformers/default"
+    }
+  ]
+}
