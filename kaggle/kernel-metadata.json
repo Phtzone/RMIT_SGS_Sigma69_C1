@@ -1,0 +1,18 @@
+{
+  "id": "phtzone/rmit-sgs-sigma69-c1",
+  "id_no": 140144687,
+  "title": "RMIT_SGS_Sigma69_C1",
+  "code_file": "../RMIT_SGS_Sigma69_C1.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": true,
+  "enable_tpu": false,
+  "enable_internet": true,
+  "competition_sources": ["rmit-hackathon-2026"],
+  "dataset_sources": [],
+  "kernel_sources": [],
+  "model_sources": [],
+  "machine_shape": "NvidiaTeslaT4",
+  "docker_image": "gcr.io/kaggle-private-byod/python@sha256:2757e0c7d1e0a9cb43da657b97e223c321a98f5014bdf64f44f2f6b083ad2b2f"
+}

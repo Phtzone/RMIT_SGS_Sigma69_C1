@@ -4,6 +4,8 @@ Tài liệu yêu cầu và quy định tuân thủ cho **Challenge 1 — Multili
 
 Tài liệu học trước: [Nội dung ôn tập và bài thi tham khảo C1](RESEARCH_C1.md) — tập trung vào bảo mật prompt, dữ liệu, đánh giá và submission; không nghiên cứu model.
 
+Pipeline đã hoàn tất chạy GPU ở Kaggle version 5: [báo cáo kết quả](reports/KAGGLE_V5_RESULTS.md), [hướng dẫn chạy](RUNBOOK.md), [notebook](RMIT_SGS_Sigma69_C1.ipynb) và [báo cáo dữ liệu](reports/DATA_REVIEW.md). Dev Macro F1 sau điều chỉnh là 0,949005; audit trước refit là 0,935382. CSV 6.000 dòng đã kiểm chứng; chưa gửi submission trong quá trình làm việc này. [Lộ trình tối ưu tiếp theo](reports/C1_NEXT_STEPS.md) mới là đề xuất, chưa chạy.
+
 ## 1. Nguồn thông tin và phạm vi
 
 - [Trang cuộc thi Kaggle](https://www.kaggle.com/competitions/rmit-hackathon-2026): nội dung Overview, Description, Challenge và Evaluation do người dùng cung cấp.
